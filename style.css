@@ -1,0 +1,68 @@
+body{
+    margin:0;
+    background:#52430985;
+    overflow:hidden;
+    text-align:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+#myCanvas{
+    /* background:lightgray; */
+    /* background: rgb(119, 194, 163); */
+    background: rgb(97, 167, 123);
+}
+#kmdiv {
+    position: absolute;
+    /* top: 10px; */
+    /* left: 10px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: rgba(128, 124, 124, .5);
+    width: 100%;
+    height: 99%;
+    padding: -10px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px,
+                rgba(0, 0, 0, 0.09) 0px 4px 2px,
+                rgba(0, 0, 0, 0.09) 0px 8px 4px,
+                rgba(0, 0, 0, 0.09) 0px 16px 8px,
+                rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 2rem;
+}
+#myCanvas {
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px,
+                rgba(0, 0, 0, 0.09) 0px 4px 2px,
+                rgba(0, 0, 0, 0.09) 0px 8px 4px,
+                rgba(0, 0, 0, 0.09) 0px 16px 8px,
+                rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+#kmdiv #id_km, #kmdiv #id_winner {
+    display: block;
+}
+
+#kmdiv #id_score {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 600px;
+    font-size: 0.7em;
+    text-align: left;
+    padding: 20px;
+}
+
+#kmdiv #id_score label {
+    display:block;
+    border: 0.2em dashed rgba(100,100,100,.5);
+    margin: 5px;
+    flex-basis: calc(33.33% - 10px); /* Define a largura de cada label para 33.33% com margem */
+    box-sizing: border-box; /* Inclui margens na largura do label */
+    text-align: center;
+}
+#main {
+    position:relative;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML><html><head><meta chaset='utf-8'></head><body><pre>
+=== Instruções ===
+Há várias formas de utilizar esse código, escolhendo colocar um tanque movido pelo teclado, nenhum ou vários tanques movidos aleatoriamente pelo JavaScript e nenhum ou vários tanques movidos pelo Prolog.
+Para isso, edite as seguintes linhas do arquivo "main.js":
+      dummyTanks=10, // quantidade de tanques aleatórios
+      keysTank=true, // modifique para ter um tanque controlado pelo teclado
+      prologTanks=["Ligerin", "ApagaFogo"], // nomes (e quantidade) dos tanques movidos pelo prolog
+Caso não tenham tanques movidos pelo Prolog, deixe o vetor referente vazio:
+    prologTanks=[],
+
+Quando não há tanques movidos pelo Prolog, você pdoe executar o arquivo index.html diretamente no navegador de Internet (obs. foi testado no Brave Browser).
+
+Caso existam tanques movidos prlo Prolog, siga os passos abaixo.
+
+=== Como executar o servidor pelo Prolog ===
+
+Instale o SWI-Prolog (https://www.swi-prolog.org/)
+Execute o comando: swipl -s servidor.pl (ou abra esse arquivo no swi-prolog)
+Ele já inicia o servidor automaticamente e exibe a seguinte mensagem:
+   --========================================--
+
+   % Started server at http://localhost:8080/
+
+
+   --========================================--
+Agora então, é só ir ao navegador de internet e acessar o endereço acima.
+A implentação aqui está fornecendo dois tanques que tem movimentos aleatórios.
+O primeiro é implementado no arquivo "tanque0.pl" e o seguindo no arquivo "tanque1.pl".
+Ao adicionar mais tanques no "main.js", edite o arquivo "controle_tanques.pl", seguindo os exemplos já apresentados lá.
+Para implementar a inteligência dos tanques, edite e siga as intruções do arquivo "tanque0.pl" ou "tanque1.pl"
+
+Have fun =)
+</pre></body></html>

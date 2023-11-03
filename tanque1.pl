@@ -57,22 +57,22 @@ atualizar_estados(Entradas, Comandos) :-
     asserta(entradaAnterior(Entradas)),
     asserta(comandoAnterior(Comandos)).
 
-%Identificação
-%Identificação de proximidade de sentido
+%Escolhas
+%Escolha de sentido
 %Retorno [Frentre, Re]
-identificar_proximidade_sentido([_, _, _, _, _, 1, _, _, 1, _], [1 , 1]) :- !.
-identificar_proximidade_sentido([_, _, _, _, _, F, _, _, T, _], [1 , 0]) :- T >= F, !.
-identificar_proximidade_sentido(_, [0 , 1]) :- !.
+escolher_sentido([_, _, _, _, _, 1, _, _, 1, _], [F , R]) :- comandoAnterior([F, R, _, _, _]), F =\= R, !.
+escolher_sentido([_, _, _, _, _, F, _, _, T, _], [1 , 0]) :- F >= T, !.
+escolher_sentido(_, [0 , 1]) :- !.
 
-%Identificação de proximidade de direção
+%Escolhas de direção
 %Retorno [Direita, Esquerda]
-identificar_proximidade_direcao([_, _, _, 1, 1 ,_, 1, 1, _, _], [1, 1]) :- !.
-identificar_proximidade_direcao([_, _, _, E1, E2 ,_, D1, D2, _, _], [1, 0]) :- (E1 + E2) / 2 <= (D1 + D2) / 2, !.
-identificar_proximidade_direcao(_, [0, 1]).
+escolher_direcao([_, _, _, 1, 1 ,_, 1, 1, _, _], [D, E]) :- comandoAnterior([_, _, D, E, _]), D =\= E, !.
+escolher_direcao([_, _, _, E1, E2 ,_, D1, D2, _, _], [1, 0]) :- (E1 + E2) / 2 >= (D1 + D2) / 2, !.
+escolher_direcao(_, [0, 1]).
 
 %Identifica necessidade de atirar
-Identifica_necessidade_atirar([_, _, _, _, _ ,T, _, _, _, _], 1) :- T < 1, !.
-Identifica_necessidade_atirar(_, 0).
+identifica_necessidade_atirar([_, _, _, _, _ ,T, _, _, _, _], 1) :- T < 0.7, comandoAnterior([_, _, _, _, 0]), !.
+identifica_necessidade_atirar(_, 0).
 
 %%% Faça seu codigo a partir daqui, sendo necessario sempre ter o predicado:
 %%%% obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :- ...
@@ -80,9 +80,9 @@ troca(0, 1) :- !.
 troca(1, 0).
 
 obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
-    identificar_proximidade_sentido([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE]),
-    identificar_proximidade_direcao([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [LEFT, RIGHT]),
-    Identifica_necessidade_atirar([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], BOOM),
+    escolher_sentido([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE]),
+    escolher_direcao([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [LEFT, RIGHT]),
+    identifica_necessidade_atirar([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], BOOM),
     movimentoValido([FORWARD, REVERSE, LEFT, RIGHT, BOOM]),
     atualizar_estados([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]),
     !.

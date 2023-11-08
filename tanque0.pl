@@ -1,5 +1,7 @@
 % Tanque 0
 :- module(tanque0, [obter_controles/2]).
+:- dynamic entradaAnterior/1.
+:- dynamic comandoAnterior/1.
 
 %% Explicação:
 % Sensores:
@@ -23,11 +25,72 @@
 %     RIGHT is 0,
 %     BOOM is 1.
 
+%Nomeclatura
+%Sentido Frente ou Ré
+%Direção Direita ou Esquerda
+%Trajeto Sentido e direção
+
+%controles comums
+%frente, ré, esquerda, direita, tiro
+movimentoValido([1, 0, 0, 0, 0]).
+movimentoValido([1, 0, 0, 1, 0]).
+movimentoValido([1, 0, 1, 0, 0]).
+movimentoValido([0, 1, 0, 0, 0]).
+movimentoValido([0, 1, 0, 1, 0]).
+movimentoValido([0, 1, 1, 0, 0]).
+movimentoValido([1, 0, 0, 0, 1]).
+movimentoValido([1, 0, 0, 1, 1]).
+movimentoValido([1, 0, 1, 0, 1]).
+movimentoValido([0, 1, 0, 0, 1]).
+movimentoValido([0, 1, 0, 1, 1]).
+movimentoValido([0, 1, 1, 0, 1]).
+movimentoValido([0, 0, 0, 0, 1]).
+movimentoValido([0, 0, 0, 0, 0]).
+
+%estados anterior
+entradaAnterior([0, 0, 0, 0, 0, 0, 0, 0, 0, 100]).
+comandoAnterior([1, 0, 1, 0, 0]).
+
+%Atalizando estados
+atualizar_estados(Entradas, Comandos) :- 
+    retract(entradaAnterior(_)),
+    retract(comandoAnterior(_)),
+    asserta(entradaAnterior(Entradas)),
+    asserta(comandoAnterior(Comandos)).
+
+%Escolhas
+%Escolha de sentido
+%Retorno [Frente, Ré]
+escolher_sentido([_, _, _, _, _, 1, _, _, 1, _], [F , R]) :- comandoAnterior([F, R, _, _, _]), !.
+escolher_sentido([_, _, _, _, _, F, _, _, T, _], [1 , 0]) :- F =< T - 0.2, !.
+escolher_sentido(_, [0 , 1]).
+
+%Escolhas de direção
+%Retorno [Esquerda, Direita]
+escolher_direcao([_, _, _, 1, 1, _, 1, 1, _, _], [E, D]) :- comandoAnterior([_, _, E, D, _]), !.
+escolher_direcao([_, _, _, E1, E2, _, D1, D2, _, _], [1, 0]) :- ((E1 + E2) / 2) =< ((D1 + D2) / 2) - 0.2, !.
+escolher_direcao(_, [0, 1]).
+
+%Identifica necessidade de atirar
+identifica_necessidade_atirar([_, _, _, _, _, T, _, _, _, _], 1) :- T < 0.7, comandoAnterior([_, _, _, _, 0]), !.
+identifica_necessidade_atirar(_, 0).
+
 %%% Faça seu codigo a partir daqui, sendo necessario sempre ter o predicado:
 %%%% obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :- ...
-
 troca(0, 1).
 troca(1, 0).
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    escolher_sentido([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE]),
+    escolher_direcao([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [LEFT, RIGHT]),
+    identifica_necessidade_atirar([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], BOOM),
+    movimentoValido([FORWARD, REVERSE, LEFT, RIGHT, BOOM]),
+    atualizar_estados([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]),
+    !.
+
+obter_controles(_, [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :- comandoAnterior([FORWARD, REVERSE, LEFT, RIGHT, BOOM]), !.
+
+%Aleatoriedade
 % [FORWARD, REVERSE, LEFT, RIGHT, BOOM]
 obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
     random_between(0,1,AA),
@@ -37,7 +100,9 @@ obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RI
     REVERSE is BB,
     LEFT is AA,
     RIGHT is BB,
-    BOOM is CC.
+    BOOM is CC,
+    atualizar_estados([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]),
+    !.
 
 % Para evitar erros, o tanque para:
 obter_controles(_, [0,0,0,0,0]).

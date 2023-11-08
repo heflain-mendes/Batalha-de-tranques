@@ -15,9 +15,9 @@ const speed=1.5, arenaPadding=10, tankW=50, tankH=30,
       // nome dos tanques controlados por Prolog (obs.: tem que adaptar o servidor.pl ao mexer aqui)
       // a quantidade é referente a quantidade de nomes, na falta de criatividade, o nome pode repetir... rs
       // exemplos de dois:
-      //prologTanks=["Ligerin", "ApagaFogo"], // se quiser colocar dois tanques proloog, faça assim
+      prologTanks=["Ligerin", "ApagaFogo"], // se quiser colocar dois tanques proloog, faça assim
       //prologTanks=["Ligerin"], // escolha aqui o nome de seu tanque controlado por prolog
-      prologTanks=[], //se não quiser nenhum tanque prolog, faça assim
+      //prologTanks=[], //se não quiser nenhum tanque prolog, faça assim
       showSensors=false, //modifique para mostrar os sensores dos tanques PROLOG e KEYS
       showSensorsOfDummyTanks=false; //modifique para mostrar os sensores dos tanques DUMMY
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

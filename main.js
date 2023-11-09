@@ -18,7 +18,7 @@ const speed=1.5, arenaPadding=10, tankW=50, tankH=30,
       prologTanks=["Ligerin", "ApagaFogo"], // se quiser colocar dois tanques proloog, faça assim
       //prologTanks=["Ligerin"], // escolha aqui o nome de seu tanque controlado por prolog
       //prologTanks=[], //se não quiser nenhum tanque prolog, faça assim
-      showSensors=false, //modifique para mostrar os sensores dos tanques PROLOG e KEYS
+      showSensors=true, //modifique para mostrar os sensores dos tanques PROLOG e KEYS
       showSensorsOfDummyTanks=false; //modifique para mostrar os sensores dos tanques DUMMY
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

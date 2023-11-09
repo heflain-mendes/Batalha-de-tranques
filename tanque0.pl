@@ -2,6 +2,7 @@
 :- module(tanque0, [obter_controles/2]).
 :- dynamic entradaAnterior/1.
 :- dynamic comandoAnterior/1.
+:- dynamic movimentoRepetido/1.
 
 %% Explicação:
 % Sensores:
@@ -32,35 +33,29 @@
 
 %controles comums
 %frente, ré, esquerda, direita, tiro
-movimentoValido([1, 0, 0, 0, 0]).
-movimentoValido([1, 0, 0, 1, 0]).
-movimentoValido([1, 0, 1, 0, 0]).
-movimentoValido([0, 1, 0, 0, 0]).
-movimentoValido([0, 1, 0, 1, 0]).
-movimentoValido([0, 1, 1, 0, 0]).
-movimentoValido([1, 0, 0, 0, 1]).
-movimentoValido([1, 0, 0, 1, 1]).
-movimentoValido([1, 0, 1, 0, 1]).
-movimentoValido([0, 1, 0, 0, 1]).
-movimentoValido([0, 1, 0, 1, 1]).
-movimentoValido([0, 1, 1, 0, 1]).
-movimentoValido([0, 0, 0, 0, 1]).
-movimentoValido([0, 0, 0, 0, 0]).
+movimentoValido([FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :- FORWARD =\= REVERSE, LEFT =\= RIGHT, !.
 
 %estados anterior
 entradaAnterior([0, 0, 0, 0, 0, 0, 0, 0, 0, 100]).
 comandoAnterior([1, 0, 1, 0, 0]).
+movimentoRepetido(0).
 
 %Atalizando estados
+%atualizar_estados(_, Comandos) :- .
+
 atualizar_estados(Entradas, Comandos) :- 
     retract(entradaAnterior(_)),
     retract(comandoAnterior(_)),
     asserta(entradaAnterior(Entradas)),
     asserta(comandoAnterior(Comandos)).
 
+%Verificando se algum carro bateu nele e o sensor não captou
+batida(SCORE) :- (entradaAnterior([_, _, _, _, _, _, _, _, _, ScoreAnterior]), SCORE =:= ScoreAnterior + 2).
+
 %Escolhas
 %Escolha de sentido
 %Retorno [Frente, Ré]
+escolher_sentido([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [1, 0]) :- batida(SCORE), S1 =\= 0, S2 =\= 0, S3 =\= 0, S4 =\= 0, S5 =\= 0, S6 =\= 0, !.
 escolher_sentido([_, _, _, _, _, 1, _, _, 1, _], [F , R]) :- comandoAnterior([F, R, _, _, _]), !.
 escolher_sentido([_, _, _, _, _, F, _, _, T, _], [1 , 0]) :- F =< T - 0.2, !.
 escolher_sentido(_, [0 , 1]).
@@ -68,7 +63,7 @@ escolher_sentido(_, [0 , 1]).
 %Escolhas de direção
 %Retorno [Esquerda, Direita]
 escolher_direcao([_, _, _, 1, 1, _, 1, 1, _, _], [E, D]) :- comandoAnterior([_, _, E, D, _]), !.
-escolher_direcao([_, _, _, E1, E2, _, D1, D2, _, _], [1, 0]) :- ((E1 + E2) / 2) =< ((D1 + D2) / 2) - 0.2, !.
+escolher_direcao([_, _, _, E1, E2, _, D1, D2, _, _], [1, 0]) :- ((E1 + E2) / 2) =< ((D1 + D2) / 2), !.
 escolher_direcao(_, [0, 1]).
 
 %Identifica necessidade de atirar

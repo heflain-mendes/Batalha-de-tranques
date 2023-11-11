@@ -1,5 +1,5 @@
-% Tanque 0
-:- module(tanque0, [obter_controles/2]).
+% Tanque 1
+:- module(tanque1, [obter_controles/2]).
 :- dynamic entradaAnterior/1.
 :- dynamic comandoAnterior/1.
 :- dynamic movimentoRepetido/1.
@@ -79,7 +79,7 @@ escolher_sentido([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [1, 0]) :-
 escolher_sentido([_, _, _, _, _, 1, _, _, 1, _], [F , R]) :- 
     comandoAnterior([F, R, _, _, _]).
 escolher_sentido([_, _, _, _, _, F, _, _, T, _], [1 , 0]) :- 
-    F =< (T + 0.3).
+    F =< (T - 0.3).
 escolher_sentido(_, [0 , 1]).
 
 %Escolhas de direção
